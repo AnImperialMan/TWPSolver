@@ -31,13 +31,13 @@ namespace TWPPract
         }
     }
 
-    public struct FixedRule
+    public struct SingleRule
     {
         public readonly string Key;
         public readonly byte Symbol;
         public readonly string LastSymbol;
         
-        public FixedRule(string key, byte symbol, string lastSymbol)
+        public SingleRule(string key, byte symbol, string lastSymbol)
         {
             Key = key;
             Symbol = symbol;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace TWPPract
 {
@@ -44,7 +45,7 @@ namespace TWPPract
         }
 
 
-        public static List<SingleRule> CreateSingleRules(Rule[] basicRules)
+        public static List<SingleRule> CreateSingleRules(IEnumerable<Rule> basicRules)
         {
             var newRules = new List<SingleRule>();
             var iters = new Dictionary<string, int>();
@@ -75,6 +76,38 @@ namespace TWPPract
             }
 
             return newRules;
+        }
+        
+        public static List<TableItem> CreateTable(List<SingleRule> singleRules)
+        {
+            var table = new List<TableItem>();
+            var noRepeat = new List<string>();
+            
+            foreach (var rule in singleRules.Where(rule => !noRepeat.Contains(rule.Key)))
+            {
+                noRepeat.Add(rule.Key);
+                var tableItem = new TableItem(rule.Key, new string[8]);
+                var rules = singleRules.Where(x => x.Key == rule.Key).ToList();
+                for (var i = 0; i < 8; i++)
+                {
+                    var currentValues = rules.Where(x => x.Symbol == (byte) i).ToList();
+                    
+                    var link = "";
+                    foreach (var item in currentValues)
+                    {
+                        if (item.LastSymbol == "" || item.LastSymbol == "\0")
+                            link += "Z";
+                        else
+                        {
+                            link += item.LastSymbol;
+                        }
+                    }
+
+                    tableItem.Links[i] = link;
+                }
+            }
+
+            return table;
         }
     }
 }

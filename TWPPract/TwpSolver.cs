@@ -114,12 +114,10 @@ namespace TWPPract
         public static List<TableItem> CreateDeterTable(List<TableItem> table)
         {
             var newTable = new List<TableItem>();
-            foreach (var item in table)
+            foreach (var item in table.Where(item => newTable.Count(x => x.Key.Contains(item.Key)) <= 0))
             {
-                if (newTable.Count(x => x.Key.Contains(item.Key)) > 0)
-                    continue;
-
-                bool isAdded = false;
+                newTable.Add(item);
+                int iter = 0;
                 foreach (var link in item.Links)
                 {
                     if (link.Length > 2)
@@ -128,7 +126,9 @@ namespace TWPPract
                         for (int i = 0; i < link.Length / 2; i++)
                         {
                             links.Add(link.Substring(i * 2, 2));
-                        }
+                        }                       
+                        var redirect = string.Join("_", links);
+
 
                         var tableItems = new List<TableItem>();
                         foreach (var lnk in links)
@@ -145,13 +145,13 @@ namespace TWPPract
                             }
                         }
 
-                        var newTableItem = new TableItem(link, newLinks);
+                        newTable[^1].Links[iter] = redirect;
+                        var newTableItem = new TableItem(redirect, newLinks);
                         newTable.Add(newTableItem);
-                        isAdded = true;
                     }
+
+                    iter++;
                 }
-                if (!isAdded)
-                   newTable.Add(item); 
             }
 
             return newTable;

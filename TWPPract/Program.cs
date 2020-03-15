@@ -41,10 +41,10 @@ namespace TWPPract
             }
             
             Console.WriteLine("\n\n\n4.Таблица");
-            const int spacesCount = 8;
+            Console.Write("      ");
             for (var i = 0; i < 8; i++)
             {
-                for (var j = 0; j < spacesCount - 2; j++)
+                for (var j = 0; j < TableItem.Spacing - 2; j++)
                 {
                     Console.Write(" ");
                 }
@@ -52,49 +52,32 @@ namespace TWPPract
             }
             Console.WriteLine();
 
-            var noRepeat = new List<string>();
-            foreach (var rule in singleRules.Where(rule => !noRepeat.Contains(rule.Key)))
+            var table = TwpSolver.CreateTable(singleRules);
+            foreach (var item in table)
             {
-                noRepeat.Add(rule.Key);
-                Console.Write($"{rule.Key}");
-                Console.Write(rule.Key.Length == 1 ? " |" : "|");
-                
-                var values = singleRules.Where(x => x.Key == rule.Key).ToList();
-                for (var i = 0; i < 8; i++)
-                {
-                    var currentValues = values.Where(x => x.Symbol == (byte) i).ToList();
-                    
-                    var addStr = "";
-                    foreach (var item in currentValues)
-                    {
-                        if (item.LastSymbol == "" || item.LastSymbol == "\0")
-                            addStr += "Z";
-                        else
-                        {
-                            addStr += item.LastSymbol;
-                        }
-                    }
-                    var spaces = spacesCount - addStr.Length;
-
-                    var first = spaces / 2;
-                    var second = spaces - first;
-
-                    for (var s = 0; s < first; s++)
-                    {
-                        Console.Write(" ");
-                    }
-                    
-                    Console.Write(addStr);
-                    
-                    for (var s = 0; s < second ; s++)
-                    {
-                        Console.Write(" ");
-                    }
-                }
-                
-                Console.WriteLine();
+                Console.WriteLine(item.ToString());
             }
-            Console.WriteLine("Z |");
+
+            Console.WriteLine("Z       |");
+
+            Console.WriteLine("\n\n\n5.Детерминированная таблица");
+            Console.Write("      ");
+            for (var i = 0; i < 8; i++)
+            {
+                for (var j = 0; j < TableItem.Spacing - 2; j++)
+                {
+                    Console.Write(" ");
+                }
+                Console.Write($"x{i}");
+            }
+            Console.WriteLine();
+            var deterTable = TwpSolver.CreateDeterTable(table);
+            foreach (var item in deterTable)
+            {
+                Console.WriteLine(item.ToString());
+            }
+            Console.WriteLine("Z       |");
+
         }
        
     }

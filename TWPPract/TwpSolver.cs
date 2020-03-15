@@ -105,9 +105,56 @@ namespace TWPPract
 
                     tableItem.Links[i] = link;
                 }
+                table.Add(tableItem);
             }
 
             return table;
+        }
+
+        public static List<TableItem> CreateDeterTable(List<TableItem> table)
+        {
+            var newTable = new List<TableItem>();
+            foreach (var item in table)
+            {
+                if (newTable.Count(x => x.Key.Contains(item.Key)) > 0)
+                    continue;
+
+                bool isAdded = false;
+                foreach (var link in item.Links)
+                {
+                    if (link.Length > 2)
+                    {
+                        var links = new List<string>();
+                        for (int i = 0; i < link.Length / 2; i++)
+                        {
+                            links.Add(link.Substring(i * 2, 2));
+                        }
+
+                        var tableItems = new List<TableItem>();
+                        foreach (var lnk in links)
+                        {
+                            tableItems.Add(table.FirstOrDefault(x => x.Key == lnk));
+                        }
+
+                        var newLinks = new[] { "", "", "", "", "", "", "", ""};
+                        foreach (var tblItem in tableItems)
+                        {
+                            for (var i = 0; i < newLinks.Length; i++)
+                            {
+                                newLinks[i] += tblItem.Links[i];
+                            }
+                        }
+
+                        var newTableItem = new TableItem(link, newLinks);
+                        newTable.Add(newTableItem);
+                        isAdded = true;
+                    }
+                }
+                if (!isAdded)
+                   newTable.Add(item); 
+            }
+
+            return newTable;
         }
     }
 }

@@ -156,5 +156,37 @@ namespace TWPPract
 
             return newTable;
         }
+
+        public static List<TableItem> MinimizeTable(List<TableItem> table)
+        {
+            var groups = new List<TableItem>();
+            var gid = 1;
+
+            var group = new TableItem("q" + gid++, table[0].Links);
+            for (var i = 0; i < table.Count; i++)
+            {
+                if (table[i] == group)
+                {
+                    
+                }
+            }
+            
+            while (groups.Count > 0)
+            {
+                var group = new TableItem("q" + gid++, table[0].Links);
+                
+                foreach (var tItem in table)
+                {
+                    if (tItem == table[0])
+                    {
+                        group.Add(tItem);
+                    }
+                }
+                groups.Add(group);
+                table.RemoveAt(0);
+            }
+
+            return groups;
+        }
     }
 }

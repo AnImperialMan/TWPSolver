@@ -78,6 +78,28 @@ namespace TWPPract
             }
             Console.WriteLine("Z       |");
 
+
+            var groups = TwpSolver.MinimizeTable(deterTable);
+            Console.WriteLine("\n\n\n6.Минимизированная таблица");
+            Console.Write("      ");
+            for (var i = 0; i < 8; i++)
+            {
+                for (var j = 0; j < TableItem.Spacing - 2; j++)
+                {
+                    Console.Write(" ");
+                }
+                Console.Write($"x{i}");
+            }
+            Console.WriteLine();
+            foreach (var group in groups)
+            {
+                foreach (var t in group)
+                {
+                    Console.WriteLine(t);
+                }
+            }
+            
+            Console.WriteLine("Z       |");
         }
        
     }

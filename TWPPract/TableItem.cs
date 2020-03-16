@@ -15,7 +15,23 @@ namespace TWPPract
             Key = key;
             Links = links;
         }
-        
+
+        public static bool operator ==(TableItem a, TableItem b)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                if (a.Links[i] != b.Links[i])
+                    return false;
+            }
+
+            return true;
+        }
+
+        public static bool operator !=(TableItem a, TableItem b)
+        {
+            return !(a == b);
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();

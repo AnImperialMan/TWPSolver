@@ -52,10 +52,10 @@ namespace TWPPract
             TaskSolution.WriteLine("\n\n\n5.Детерминированная таблица");
             TaskSolution.WriteLine(deterTable.ToString());
 
-            TaskSolution.WriteLine("\n\n\n6.Группировка: ");
-            var minimizeTable = TwpSolver.MinimizeTable(deterTable);
-            TaskSolution.WriteLine("\n\n\n7.Минимизированная таблица");
-            TaskSolution.WriteLine(minimizeTable.ToString());
+            //TaskSolution.WriteLine("\n\n\n6.Группировка: ");
+            //var minimizeTable = TwpSolver.MinimizeTable(deterTable);
+            //TaskSolution.WriteLine("\n\n\n7.Минимизированная таблица");
+            //TaskSolution.WriteLine(minimizeTable.ToString());
 
             var solFileName = $"TWP_Sol_{name}.txt";
             File.WriteAllText(solFileName, TaskSolution.ReadAll, Encoding.UTF8);

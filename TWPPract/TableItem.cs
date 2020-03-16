@@ -1,18 +1,23 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
 namespace TWPPract
 {
     public struct TableItem
     {
         public const int Spacing = 8;
-        
+        public const int LinksCount = 8;
+        public static string[] EmptyLinks => Enumerable.Repeat("", LinksCount).ToArray();
         public readonly string Key;
         
         public readonly string[] Links;
 
-        public TableItem(string key, string[] links)
+        public TableItem(string key, string[] links = null)
         {
             Key = key;
+            
+            if (links == null)
+                links = EmptyLinks;
             Links = links;
         }
 

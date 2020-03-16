@@ -78,15 +78,15 @@ namespace TWPPract
             return newRules;
         }
         
-        public static List<TableItem> CreateTable(List<SingleRule> singleRules)
+        public static Table CreateTable(List<SingleRule> singleRules)
         {
-            var table = new List<TableItem>();
+            var table = new Table();
             var noRepeat = new List<string>();
             
             foreach (var rule in singleRules.Where(rule => !noRepeat.Contains(rule.Key)))
             {
                 noRepeat.Add(rule.Key);
-                var tableItem = new TableItem(rule.Key, new string[8]);
+                var tableItem = new TableItem(rule.Key);
                 var rules = singleRules.Where(x => x.Key == rule.Key).ToList();
                 for (var i = 0; i < 8; i++)
                 {
@@ -107,13 +107,14 @@ namespace TWPPract
                 }
                 table.Add(tableItem);
             }
+            table.Add(new TableItem("Z"));
 
             return table;
         }
 
-        public static List<TableItem> CreateDeterTable(List<TableItem> table)
+        public static Table CreateDeterTable(Table table)
         {
-            var newTable = new List<TableItem>();
+            var newTable = new Table();
             foreach (var item in table.Where(item => newTable.Count(x => x.Key.Contains(item.Key)) <= 0))
             {
                 newTable.Add(item);
@@ -130,7 +131,7 @@ namespace TWPPract
                         var redirect = string.Join("_", links);
 
 
-                        var tableItems = new List<TableItem>();
+                        var tableItems = new Table();
                         foreach (var lnk in links)
                         {
                             tableItems.Add(table.FirstOrDefault(x => x.Key == lnk));
@@ -157,36 +158,51 @@ namespace TWPPract
             return newTable;
         }
 
-        public static List<TableItem> MinimizeTable(List<TableItem> table)
+        public static Table MinimizeTable(Table table)
         {
-            var groups = new List<TableItem>();
-            var gid = 1;
-
-            var group = new TableItem("q" + gid++, table[0].Links);
             for (var i = 0; i < table.Count; i++)
             {
-                if (table[i] == group)
-                {
-                    
-                }
-            }
-            
-            while (groups.Count > 0)
-            {
-                var group = new TableItem("q" + gid++, table[0].Links);
+                var source = new TableItem("q" + i, table[i].Links);
+                var duplicatesIds = table.Where(x => x == source).Select(k => k.Key).ToArray();
                 
-                foreach (var tItem in table)
+                for (var j = 0; j < table.Count; j++)
                 {
-                    if (tItem == table[0])
+                    for (var l = 0; l < table[j].Links.Length; l++)
                     {
-                        group.Add(tItem);
+                        if (duplicatesIds.Contains(table[j].Links[l]))
+                        {
+                            table[j].Links[l] = source.Key;
+                        }
                     }
                 }
-                groups.Add(group);
-                table.RemoveAt(0);
+
+                table[table.FindIndex(x => x.Key == table[i].Key)] = source;
+                table.RemoveAll(x => duplicatesIds.Contains(x.Key) && x.Key != source.Key);
+
+                if (duplicatesIds.Length > 1 || duplicatesIds.Length == 1 && duplicatesIds[0] != source.Key)
+                {
+                    TaskSolution.Write(source.Key + " = {");
+                    var first = true;
+                    foreach (var dup in duplicatesIds)
+                    {
+                        if (first)
+                            first = false;
+                        else
+                            TaskSolution.Write(", ");
+                        TaskSolution.Write(dup);
+                    }
+                    TaskSolution.Write("}");
+                    TaskSolution.WriteLine();
+                }
+
+                if (duplicatesIds.Length > 1)
+                {
+                    i = 0;
+                }
             }
 
-            return groups;
+
+            return table;
         }
     }
 }

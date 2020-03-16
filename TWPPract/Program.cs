@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace TWPPract
 {
@@ -8,7 +10,7 @@ namespace TWPPract
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите свою фамилию и имя 18 символов или более (остальное будет обрезано)");
+            Console.WriteLine("Введите свою фамилию и имя(не менее 18 символов)");
             Console.WriteLine();
             var name = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(name))
@@ -16,90 +18,48 @@ namespace TWPPract
                 Console.WriteLine("Строка пуста!");
                 return;
             }
+            name = name.Substring(0, 18);
+            Console.WriteLine("Введено: " + name);
+            TaskSolution.WriteLine("Решение ТВП для: " + name);
 
             var cipherName = TwpSolver.EncryptName(name);
             if (cipherName == null)
                 return;
-            Console.WriteLine("\n\n1. Зашифрованное имя и фамилия: ");
-            foreach (var item in cipherName)
-                Console.Write(" x" + item);
             
+            TaskSolution.WriteLine("\n\n1. Зашифрованное имя и фамилия: ");
+            foreach (var item in cipherName)
+                TaskSolution.Write("x" + item + " ");
             
             var studentRules = TwpSolver.CreateBasicRules(cipherName);
-            Console.WriteLine("\n\n\n2. Правила: ");
+            TaskSolution.WriteLine("\n\n\n2. Правила: ");
             foreach (var rule in studentRules)
             {
-                Console.WriteLine(rule.ToString());
+                TaskSolution.WriteLine(rule.ToString());
             }
-
-
+            
             var singleRules = TwpSolver.CreateSingleRules(studentRules);
-            Console.WriteLine("\n\n\n3.Новые правила: ");
+            TaskSolution.WriteLine("\n\n\n3.Новые правила: ");
             foreach (var rule in singleRules)
             {
-                Console.WriteLine(rule.ToString());
+                TaskSolution.WriteLine(rule.ToString());
             }
             
-            Console.WriteLine("\n\n\n4.Таблица");
-            Console.Write("      ");
-            for (var i = 0; i < 8; i++)
-            {
-                for (var j = 0; j < TableItem.Spacing - 2; j++)
-                {
-                    Console.Write(" ");
-                }
-                Console.Write($"x{i}");
-            }
-            Console.WriteLine();
-
             var table = TwpSolver.CreateTable(singleRules);
-            foreach (var item in table)
-            {
-                Console.WriteLine(item.ToString());
-            }
+            TaskSolution.WriteLine("\n\n\n4.Недетерминированная таблица");
+            TaskSolution.WriteLine(table.ToString());
 
-            Console.WriteLine("Z       |");
-
-            Console.WriteLine("\n\n\n5.Детерминированная таблица");
-            Console.Write("      ");
-            for (var i = 0; i < 8; i++)
-            {
-                for (var j = 0; j < TableItem.Spacing - 2; j++)
-                {
-                    Console.Write(" ");
-                }
-                Console.Write($"x{i}");
-            }
-            Console.WriteLine();
             var deterTable = TwpSolver.CreateDeterTable(table);
-            foreach (var item in deterTable)
-            {
-                Console.WriteLine(item.ToString());
-            }
-            Console.WriteLine("Z       |");
+            TaskSolution.WriteLine("\n\n\n5.Детерминированная таблица");
+            TaskSolution.WriteLine(deterTable.ToString());
 
+            TaskSolution.WriteLine("\n\n\n6.Группировка: ");
+            var minimizeTable = TwpSolver.MinimizeTable(deterTable);
+            TaskSolution.WriteLine("\n\n\n7.Минимизированная таблица");
+            TaskSolution.WriteLine(minimizeTable.ToString());
 
-            var groups = TwpSolver.MinimizeTable(deterTable);
-            Console.WriteLine("\n\n\n6.Минимизированная таблица");
-            Console.Write("      ");
-            for (var i = 0; i < 8; i++)
-            {
-                for (var j = 0; j < TableItem.Spacing - 2; j++)
-                {
-                    Console.Write(" ");
-                }
-                Console.Write($"x{i}");
-            }
-            Console.WriteLine();
-            foreach (var group in groups)
-            {
-                foreach (var t in group)
-                {
-                    Console.WriteLine(t);
-                }
-            }
-            
-            Console.WriteLine("Z       |");
+            var solFileName = $"TWP_Sol_{name}.txt";
+            File.WriteAllText(solFileName, TaskSolution.ReadAll, Encoding.UTF8);
+            Console.WriteLine("Решение было выгружено в файл: " + solFileName);
         }
        
     }

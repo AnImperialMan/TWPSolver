@@ -143,14 +143,13 @@ namespace TWPPract
                         }
                         newTable[r].Cells[iter] = new TableCell(new [] {combinedKey});
 
-                        newTable.RemoveAll(x => matchingRows.Contains(x));
+                        newTable.RemoveAll(x => matchingRows.Contains(x) && x.Key != "Z");
                         newTable.Insert(r + 1, new TableRow(combinedKey, newCells.ToArray()));
                     }
 
                     iter++;
                 }
             }
-            newTable.Add(new TableRow("Z"));
 
             return newTable;
         }

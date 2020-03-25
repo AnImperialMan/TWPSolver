@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TWPPract.DataStructures;
 
 namespace TWPPract
 {
@@ -86,92 +87,88 @@ namespace TWPPract
             foreach (var rule in singleRules.Where(rule => !noRepeat.Contains(rule.Key)))
             {
                 noRepeat.Add(rule.Key);
-                var tableItem = new TableItem(rule.Key);
+                
+                var tableRow = new TableRow(rule.Key);
                 var rules = singleRules.Where(x => x.Key == rule.Key).ToList();
-                for (var i = 0; i < 8; i++)
+                for (var i = 0; i < TwpDataProvider.ColumnCount; i++)
                 {
-                    var currentValues = rules.Where(x => x.Symbol == (byte) i).ToList();
-                    
-                    var link = "";
-                    foreach (var item in currentValues)
+                    var notEmptyValues = rules.Where(x => x.Symbol == (byte) i).ToList();
+
+                    var links = new List<string>();
+                    foreach (var item in notEmptyValues)
                     {
                         if (item.LastSymbol == "" || item.LastSymbol == "\0")
-                            link += "Z";
+                        {
+                            links.Add("Z");
+                        }
                         else
                         {
-                            link += item.LastSymbol;
+                            links.Add(item.LastSymbol);
                         }
                     }
-
-                    tableItem.Links[i] = link;
+                    
+                    tableRow.Cells[i] = new TableCell(links.ToArray());
                 }
-                table.Add(tableItem);
+                
+                table.Add(tableRow);
             }
-            table.Add(new TableItem("Z"));
+
+            table.Add(new TableRow("Z"));
 
             return table;
         }
 
         public static Table CreateDeterTable(Table table)
         {
-            var newTable = new Table();
-            foreach (var item in table.Where(item => newTable.Count(x => x.Key.Contains(item.Key)) <= 0))
-            {
-                newTable.Add(item);
-                int iter = 0;
-                foreach (var link in item.Links)
+            var newTable = table;
+            for (var r = 0; r < newTable.Count; r++)
+            {                
+                var item = newTable[r];
+                var iter = 0;
+                foreach (var tableCell in item.Cells)
                 {
-                    if (link.Length > 2)
+                    if (tableCell.Links.Length > 1)
                     {
-                        var links = new List<string>();
-                        for (int i = 0; i < link.Length / 2; i++)
+                        var combinedKey = string.Join(".", tableCell.Links);
+                        
+                        // находим все строки где ключ один из текущих ссылок
+                        var matchingRows = newTable.Where(x => tableCell.Links.Contains(x.Key)).ToArray();
+                        
+                        // инициализируем новые клетки для новой строки
+                        var newCells =  new List<TableCell>();
+                        for (var i = 0; i < TwpDataProvider.ColumnCount; i++)
                         {
-                            links.Add(link.Substring(i * 2, 2));
-                        }                       
-                        var redirect = string.Join("_", links);
-
-
-                        var tableItems = new Table();
-                        foreach (var lnk in links)
-                        {
-                            tableItems.Add(table.FirstOrDefault(x => x.Key == lnk));
+                            var manySelected = matchingRows.SelectMany(s => s.Cells[i].Links).ToArray();
+                            newCells.Add(new TableCell(manySelected));
                         }
+                        newTable[r].Cells[iter] = new TableCell(new [] {combinedKey});
 
-                        var newLinks = new[] { "", "", "", "", "", "", "", ""};
-                        foreach (var tblItem in tableItems)
-                        {
-                            for (var i = 0; i < newLinks.Length; i++)
-                            {
-                                newLinks[i] += tblItem.Links[i];
-                            }
-                        }
-
-                        newTable[^1].Links[iter] = redirect;
-                        var newTableItem = new TableItem(redirect, newLinks);
-                        newTable.Add(newTableItem);
+                        newTable.RemoveAll(x => matchingRows.Contains(x));
+                        newTable.Insert(r + 1, new TableRow(combinedKey, newCells.ToArray()));
                     }
 
                     iter++;
                 }
             }
+            newTable.Add(new TableRow("Z"));
 
             return newTable;
         }
 
-        public static Table MinimizeTable(Table table)
+        /*public static Table MinimizeTable(Table table)
         {
             for (var i = 0; i < table.Count; i++)
             {
-                var source = new TableItem("q" + i, table[i].Links);
+                var source = new TableRow("q" + i, table[i].Cells);
                 var duplicatesIds = table.Where(x => x == source).Select(k => k.Key).ToArray();
                 
                 for (var j = 0; j < table.Count; j++)
                 {
-                    for (var l = 0; l < table[j].Links.Length; l++)
+                    for (var l = 0; l < table[j].Cells.Length; l++)
                     {
-                        if (duplicatesIds.Contains(table[j].Links[l]))
+                        if (duplicatesIds.Contains(table[j].Cells[l]))
                         {
-                            table[j].Links[l] = source.Key;
+                            table[j].Cells[l] = source.Key;
                         }
                     }
                 }
@@ -203,6 +200,6 @@ namespace TWPPract
 
 
             return table;
-        }
+        }*/
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace TWPPract
+namespace TWPPract.DataStructures
 {
-    public class Table: List<TableItem>
+    public class Table: List<TableRow>
     {
         public override string ToString()
         {
@@ -11,7 +11,7 @@ namespace TWPPract
             sb.Append("      ");
             for (var i = 0; i < 8; i++)
             {
-                for (var j = 0; j < TableItem.Spacing - 2; j++)
+                for (var j = 0; j < TableRow.Spacing - 2; j++)
                 {
                     sb.Append(" ");
                 }

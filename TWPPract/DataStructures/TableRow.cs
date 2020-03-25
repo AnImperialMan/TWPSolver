@@ -1,38 +1,38 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace TWPPract
+namespace TWPPract.DataStructures
 {
-    public struct TableItem
+    public struct TableRow
     {
         public const int Spacing = 8;
-        public const int LinksCount = 8;
-        public static string[] EmptyLinks => Enumerable.Repeat("", LinksCount).ToArray();
+        public const int CellsCount = 8;
+        public static TableCell[] EmptyCells => Enumerable.Repeat(TableCell.Empty, CellsCount).ToArray();
         public readonly string Key;
         
-        public readonly string[] Links;
+        public readonly TableCell[] Cells;
 
-        public TableItem(string key, string[] links = null)
+        public TableRow(string key, TableCell[] cells = null)
         {
             Key = key;
             
-            if (links == null)
-                links = EmptyLinks;
-            Links = links;
+            if (cells == null)
+                cells = EmptyCells;
+            Cells = cells;
         }
 
-        public static bool operator ==(TableItem a, TableItem b)
+        public static bool operator ==(TableRow a, TableRow b)
         {
             for (int i = 0; i < 8; i++)
             {
-                if (a.Links[i] != b.Links[i])
+                if (a.Cells[i] != b.Cells[i])
                     return false;
             }
 
             return true;
         }
 
-        public static bool operator !=(TableItem a, TableItem b)
+        public static bool operator !=(TableRow a, TableRow b)
         {
             return !(a == b);
         }
@@ -49,9 +49,9 @@ namespace TWPPract
             }
 
             sb.Append("|");
-            foreach (var item in Links)
+            foreach (var item in Cells)
             {
-                var spaces = Spacing - item.Length;
+                var spaces = Spacing - item.Links.Sum(x => x.Length);
 
                 var first = spaces / 2;
                 var second = spaces - first;

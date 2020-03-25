@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using TWPPract.DataStructures;
 
 namespace TWPPract
 {
     public static class TwpDataProvider
     {
+        public const byte ColumnCount = 8;
+        
         public static readonly Dictionary<char, byte> Cipher = new Dictionary<char, byte>()
         {
             {'А', 1},

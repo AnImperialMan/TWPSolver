@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace TWPPract
+namespace TWPPract.DataStructures
 {
     public struct Rule
     {

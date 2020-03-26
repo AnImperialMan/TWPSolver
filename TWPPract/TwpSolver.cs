@@ -12,13 +12,14 @@ namespace TWPPract
     {
         public static byte[] EncryptName(string text)
         {
+            text = text.ToUpper().Replace("Ё", "Е");
             var cipher = new byte[18];
             try
             {
                 for (var i = 0; i < cipher.Length; i++)
                 {
                     if (i < text.Length)
-                        cipher[i] = TwpDataProvider.Cipher[char.ToUpper(text[i])];
+                        cipher[i] = TwpDataProvider.Cipher[text[i]];
                     else
                         cipher[i] = TwpDataProvider.Cipher[' '];
                 }

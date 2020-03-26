@@ -22,6 +22,7 @@ namespace TWPPract
             if (name.Length >= 18)
             {
                 name = name.Substring(0, 18);
+                name = name.Replace(" ", "_");
                 Console.WriteLine("Введено: " + name);
             }
             else

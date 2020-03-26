@@ -12,7 +12,7 @@ namespace TWPPract
     {
         public static byte[] EncryptName(string text)
         {
-            text = text.ToUpper().Replace("Ё", "Е");
+            text = text.ToUpper();
             var cipher = new byte[18];
             try
             {

@@ -22,14 +22,13 @@ namespace TWPPract
             if (name.Length >= 18)
             {
                 name = name.Substring(0, 18);
-                name = name.Replace(" ", "_");
-                Console.WriteLine("Введено: " + name);
+                Console.WriteLine("Используемые данные: " + name);
             }
             else
             {
-                Console.WriteLine("Вы ввели слишком короткое имя. Недостающие символы заменены пробелами, алгоритм может сработать некорректно.");
+                Console.WriteLine("!!Вы ввели слишком короткое имя. Недостающие символы заменены пробелами, алгоритм может сработать некорректно.");
             }
-
+            
             TaskSolution.WriteLine("Решение ТВП для: " + name);
 
             var cipherName = TwpSolver.EncryptName(name);

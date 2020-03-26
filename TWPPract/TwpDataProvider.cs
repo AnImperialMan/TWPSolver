@@ -15,6 +15,7 @@ namespace TWPPract
             {'Г', 4},
             {'Д', 6},
             {'Е', 6},
+            {'Ё', 6},
             {'Ж', 4},
             {'З', 3},
             {'И', 3},
@@ -41,7 +42,7 @@ namespace TWPPract
             {'Э', 1},
             {'Ю', 3},
             {'Я', 7},
-            {'_', 5},
+            {' ', 5},
         };
 
         public static readonly Rule[] Rules = 

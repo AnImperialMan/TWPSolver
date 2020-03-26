@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using TWPPract.DataStructures;
+using Rule = TWPPract.DataStructures.Rule;
 
 namespace TWPPract
 {
@@ -154,51 +156,132 @@ namespace TWPPract
             return newTable;
         }
 
-        /*public static Table MinimizeTable(Table table)
+        public static List<Group> CalculateGroups(Table table)
         {
-            for (var i = 0; i < table.Count; i++)
+            var newTable = table;
+            var groups = new List<Group>();
+
+            var findGroup = true;
+            while (findGroup)
             {
-                var source = new TableRow("q" + i, table[i].Cells);
-                var duplicatesIds = table.Where(x => x == source).Select(k => k.Key).ToArray();
-                
-                for (var j = 0; j < table.Count; j++)
+                findGroup = false;
+                for (var i = 0; i < newTable.Count; i++)
                 {
-                    for (var l = 0; l < table[j].Cells.Length; l++)
+                    for (var j = 0; j < newTable.Count; j++)
                     {
-                        if (duplicatesIds.Contains(table[j].Cells[l]))
+                        // нашли группу
+                        if (i != j && newTable[j] == newTable[i])
                         {
-                            table[j].Cells[l] = source.Key;
+                            var keyA = newTable[i].Key;
+                            var keyB = newTable[j].Key;
+                            var groupA = groups.FirstOrDefault(x => x.Contains(keyA)); // references
+                            var groupB = groups.FirstOrDefault(x => x.Contains(keyB));
+                            
+                            if (groupA != null || groupB != null)
+                            {
+                                if (groupA != null && groupB != null)
+                                {
+                                    if (groupA == groupB)
+                                        continue;
+                                    
+                                    for (var k = 0; k < newTable.Count; k++)
+                                    {
+                                        newTable[k].Cells.Where(x => groupB.Contains(x.Links[0])).ToList().ForEach(x => x.Links[0] = groupA.Min());
+                                    }
+                                    
+                                    groupA.AddRange(groupB);
+                                    groups.Remove(groupB);
+                                    findGroup = true;
+                                }
+                                
+
+                                if (groupA == null)
+                                {
+                                    for (var k = 0; k < newTable.Count; k++)
+                                    {
+                                        newTable[k].Cells.Where(x => x.Links.Length > 0 && x.Links[0] == keyA).ToList().ForEach(x => x.Links[0] = groupB.Min());
+                                    }
+                                    groupB.Add(keyA);
+                                    findGroup = true;
+                                }
+                                
+                                if (groupB == null)
+                                {
+                                    for (var k = 0; k < newTable.Count; k++)
+                                    {
+                                        newTable[k].Cells.Where(x => x.Links.Length > 0 && x.Links[0] == keyB).ToList().ForEach(x => x.Links[0] = groupA.Min());
+                                    }
+                                    groupA.Add(keyB);
+                                    findGroup = true;
+                                }
+                            }
+                            else
+                            {
+                                groups.Add(new Group { keyA, keyB });
+                                for (var k = 0; k < newTable.Count; k++)
+                                {
+                                    newTable[k].Cells.Where(x => x.Links.Length > 0 && x.Links[0] == keyB).ToList().ForEach(x => x.Links[0] = keyA);
+                                }
+                                findGroup = true;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            groups.ForEach(g => g.Sort());
+
+            var totalGroups = new List<Group>();
+            foreach (var row in table)
+            {
+                if (totalGroups.Any(g => g.Contains(row.Key)))
+                    continue;
+                
+                var group = groups.FirstOrDefault(g => g.Contains(row.Key));
+                if (group != null)
+                {
+                    totalGroups.Add(group);
+                    groups.Remove(group);
+                }
+                else
+                {
+                    totalGroups.Add(new Group {row.Key});
+                }
+            }
+
+            return totalGroups;
+        }
+
+        public static Table CreateMinimizedTable(Table deterTable, List<Group> groups, bool useQNamings)
+        {
+            var newTable = new Table();
+            for (int i = 0; i < groups.Count; i++)
+            {
+                var group = groups[i];
+                var name = useQNamings ? $"q{i}" : string.Join(",", group);
+                for (var c = 0; c < TwpDataProvider.ColumnCount; c++)
+                {
+                    for (var j = 0; j < deterTable.Count; j++)
+                    {
+                        if (deterTable[j].Cells[c].Links.Length <= 0) 
+                            continue;
+                        
+                        var item = deterTable[j].Cells[c].Links[0];
+                        if (group.Contains(item))
+                        {
+                            deterTable[j].Cells[c].Links[0] = name;
                         }
                     }
                 }
 
-                table[table.FindIndex(x => x.Key == table[i].Key)] = source;
-                table.RemoveAll(x => duplicatesIds.Contains(x.Key) && x.Key != source.Key);
-
-                if (duplicatesIds.Length > 1 || duplicatesIds.Length == 1 && duplicatesIds[0] != source.Key)
-                {
-                    TaskSolution.Write(source.Key + " = {");
-                    var first = true;
-                    foreach (var dup in duplicatesIds)
-                    {
-                        if (first)
-                            first = false;
-                        else
-                            TaskSolution.Write(", ");
-                        TaskSolution.Write(dup);
-                    }
-                    TaskSolution.Write("}");
-                    TaskSolution.WriteLine();
-                }
-
-                if (duplicatesIds.Length > 1)
-                {
-                    i = 0;
-                }
+                var matchRow = deterTable.FirstOrDefault(x => group.Contains(x.Key));
+                var newRow = new TableRow(name, matchRow.Cells);
+                newTable.Add(newRow);
             }
-
-
-            return table;
-        }*/
+            
+            return newTable;
+        }
+        
     }
 }

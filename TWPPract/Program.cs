@@ -20,6 +20,7 @@ namespace TWPPract
             }
             name = name.Substring(0, 18);
             Console.WriteLine("Введено: " + name);
+
             TaskSolution.WriteLine("Решение ТВП для: " + name);
 
             var cipherName = TwpSolver.EncryptName(name);
@@ -52,11 +53,17 @@ namespace TWPPract
             TaskSolution.WriteLine("\n\n\n5.Детерминированная таблица");
             TaskSolution.WriteLine(deterTable.ToString());
 
-            //TaskSolution.WriteLine("\n\n\n6.Группировка: ");
-            //var minimizeTable = TwpSolver.MinimizeTable(deterTable);
-            //TaskSolution.WriteLine("\n\n\n7.Минимизированная таблица");
-            //TaskSolution.WriteLine(minimizeTable.ToString());
+            var groups = TwpSolver.CalculateGroups(deterTable);
+            TaskSolution.WriteLine("\n\n\n6.Группировка");
+            for (int i = 0; i < groups.Count; i++)
+            {
+                TaskSolution.WriteLine($"q{i} = {{{groups[i]}}}");
+            }
 
+            TaskSolution.WriteLine("\n\n\n7.Минимизированная таблица");
+            var minimizedTable = TwpSolver.CreateMinimizedTable(deterTable, groups, true);
+            TaskSolution.WriteLine(minimizedTable.ToString());
+            
             var solFileName = $"TWP_Sol_{name}.txt";
             File.WriteAllText(solFileName, TaskSolution.ReadAll, Encoding.UTF8);
             Console.WriteLine("Решение было выгружено в файл: " + solFileName);

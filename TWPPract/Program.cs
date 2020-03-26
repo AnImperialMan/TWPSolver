@@ -10,7 +10,7 @@ namespace TWPPract
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите свою фамилию и имя(не менее 18 символов)");
+            Console.WriteLine("Введите свою фамилию и имя (не менее 18 символов)");
             Console.WriteLine();
             var name = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(name))
@@ -22,7 +22,6 @@ namespace TWPPract
             if (name.Length >= 18)
             {
                 name = name.Substring(0, 18);
-                Console.WriteLine("Используемые данные: " + name);
             }
             else
             {

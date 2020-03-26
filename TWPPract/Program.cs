@@ -35,6 +35,7 @@ namespace TWPPract
                 return;
             
             TaskSolution.WriteLine("\n\n1. Зашифрованное имя и фамилия: ");
+            TaskSolution.WriteLine(String.Join("  ", name.ToArray<char>()));
             foreach (var item in cipherName)
                 TaskSolution.Write("x" + item + " ");
             

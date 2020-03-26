@@ -18,8 +18,16 @@ namespace TWPPract
                 Console.WriteLine("Строка пуста!");
                 return;
             }
-            name = name.Substring(0, 18);
-            Console.WriteLine("Введено: " + name);
+
+            if (name.Length >= 18)
+            {
+                name = name.Substring(0, 18);
+                Console.WriteLine("Введено: " + name);
+            }
+            else
+            {
+                Console.WriteLine("Вы ввели слишком короткое имя. Недостающие символы заменены пробелами, алгоритм может сработать некорректно.");
+            }
 
             TaskSolution.WriteLine("Решение ТВП для: " + name);
 

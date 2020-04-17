@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TWPPract
 {
@@ -36,7 +37,7 @@ namespace TWPPract
             TaskSolution.WriteLine("\n\n1. Зашифрованное имя и фамилия: ");
             TaskSolution.WriteLine(string.Join("  ", name.ToArray()));
             foreach (var item in cipherName)
-                TaskSolution.Write("x" + item + " ");
+                TaskSolution.Write("x" + item.ToLowerUnicode() + " ");
             
             var studentRules = TwpSolver.CreateBasicRules(cipherName);
             TaskSolution.WriteLine("\n\n\n2. Правила: ");
@@ -78,12 +79,15 @@ namespace TWPPract
                                    "https://dreampuf.github.io/GraphvizOnline/ ===");
             
             TaskSolution.WriteLine("\n\n\n8.Данные для Петри 1(недетерминированный автомат)");
+            TaskSolution.WriteLine();
             TaskSolution.WriteLine(tableDiagraph);
             
             TaskSolution.WriteLine("\n\n\n9.Данные для Петри 2(детерминированный автомат)");
+            TaskSolution.WriteLine();
             TaskSolution.WriteLine(deterTableDiagraph);
             
             TaskSolution.WriteLine("\n\n\n10.Данные для Петри 3(минимизированный автомат)");
+            TaskSolution.WriteLine();
             TaskSolution.WriteLine(minimizedTableDiagraph);
 
             var solFileName = $"TWP_Sol_{name}.txt";

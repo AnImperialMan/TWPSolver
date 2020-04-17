@@ -65,6 +65,5 @@ namespace TWPPract
             new Rule('F', new byte[] {10, 13, 14, 16},  '\0'),
             new Rule('F', new byte[] {17, 18, 15},  '\0'),
         };
-
     }
 }

@@ -70,14 +70,14 @@ namespace TWPPract
                 var first = true;
                 while (symbols.Count > 1)
                 {
-                    var newSymbol = rule.Key + (iters[rule.Key] + 1);
-                    var newRule = new SingleRule(first ? rule.Key : rule.Key + iters[rule.Key] , symbols[0], newSymbol);
+                    var newSymbol = rule.Key + (iters[rule.Key] + 1).ToLowerUnicode();
+                    var newRule = new SingleRule(first ? rule.Key : rule.Key + iters[rule.Key].ToLowerUnicode() , symbols[0], newSymbol);
                     newRules.Add(newRule);
                     symbols.RemoveAt(0);
                     iters[rule.Key]++;
                     first = false;
                 }
-                var lastRule = new SingleRule(rule.Key + iters[rule.Key], symbols[0], rule.LastSymbol);
+                var lastRule = new SingleRule(rule.Key + iters[rule.Key].ToLowerUnicode(), symbols[0], rule.LastSymbol);
                 newRules.Add(lastRule);
             }
 
@@ -122,7 +122,7 @@ namespace TWPPract
 
             return table;
         }
-        
+
         
         public static Table CreateDeterTable(Table table)
         {
@@ -136,7 +136,7 @@ namespace TWPPract
                     if (tableCell.Links.Length > 1)
                     {
                         var combinedKey = string.Join("_", tableCell.Links);
-                        
+
                         // находим все строки где ключ один из текущих ссылок
                         var matchingRows = newTable.Where(x => tableCell.Links.Contains(x.Key)).ToArray();
                         
@@ -263,7 +263,7 @@ namespace TWPPract
             for (int i = 0; i < groups.Count; i++)
             {
                 var group = groups[i];
-                var name = useQNamings ? $"q{i}" : string.Join(",", group);
+                var name = useQNamings ? $"q{i.ToLowerUnicode()}" : string.Join(",", group);
                 for (var c = 0; c < TwpDataProvider.ColumnCount; c++)
                 {
                     for (var j = 0; j < deterTable.Count; j++)
@@ -299,7 +299,7 @@ namespace TWPPract
                     if (line.Cells[i].Links.Length == 0)
                         continue;
                     var links = string.Join(", ", line.Cells[i].Links);
-                    sb.AppendLine($"{line.Key} -> {links}[label=\"x{i}\", weight=\"1\"]");
+                    sb.AppendLine($"{line.Key} -> {links}[label=\"x{i.ToLowerUnicode()}\", weight=\"1\"]");
                 }
             }
             sb.AppendLine("}");

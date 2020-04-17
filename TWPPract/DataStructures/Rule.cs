@@ -23,7 +23,7 @@ namespace TWPPract.DataStructures
             sb.Append(" -> ");
             foreach (var symbol in Symbols)
             {
-                sb.Append("x" + symbol);
+                sb.Append("x" + symbol.ToLowerUnicode());
             }
 
             sb.Append(LastSymbol);
@@ -49,7 +49,7 @@ namespace TWPPract.DataStructures
             var sb = new StringBuilder();
             sb.Append(Key);
             sb.Append(" -> ");
-            sb.Append("x" + Symbol);
+            sb.Append("x" + Symbol.ToLowerUnicode());
 
             sb.Append(LastSymbol);
             return sb.ToString();

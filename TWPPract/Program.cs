@@ -11,7 +11,6 @@ namespace TWPPract
         static void Main(string[] args)
         {
             Console.WriteLine("Введите свою фамилию и имя (не менее 18 символов)");
-            Console.WriteLine();
             var name = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -73,12 +72,19 @@ namespace TWPPract
             TaskSolution.WriteLine("\n\n\n7.Минимизированная таблица");
             var minimizedTable = TwpSolver.CreateMinimizedTable(deterTable, groups, true);
             TaskSolution.WriteLine(minimizedTable.ToString());
+            var minimizedTableDiagraph = TwpSolver.CreateDiagraphByTable(minimizedTable);
             
-            TaskSolution.WriteLine("\n\n\n8.Данные для Петри 1");
+            TaskSolution.WriteLine("=== Следующие данные последовательно забиваем сюда: " +
+                                   "https://dreampuf.github.io/GraphvizOnline/ ===");
+            
+            TaskSolution.WriteLine("\n\n\n8.Данные для Петри 1(недетерминированный автомат)");
             TaskSolution.WriteLine(tableDiagraph);
             
-            TaskSolution.WriteLine("\n\n\n8.Данные для Петри 2");
+            TaskSolution.WriteLine("\n\n\n9.Данные для Петри 2(детерминированный автомат)");
             TaskSolution.WriteLine(deterTableDiagraph);
+            
+            TaskSolution.WriteLine("\n\n\n10.Данные для Петри 3(минимизированный автомат)");
+            TaskSolution.WriteLine(minimizedTableDiagraph);
 
             var solFileName = $"TWP_Sol_{name}.txt";
             File.WriteAllText(solFileName, TaskSolution.ReadAll, Encoding.UTF8);

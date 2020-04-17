@@ -54,10 +54,12 @@ namespace TWPPract
             {
                 if (link[0] == prevLink)
                 {
-                    retStr += link.Substring(1);
+                    retStr += "," + link.Substring(1);
                 }
                 else
                 {
+                    if (prevLink != '\0')
+                        retStr += ",";
                     retStr += link;
                 }
                 prevLink = link[0];

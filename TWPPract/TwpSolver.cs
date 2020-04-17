@@ -298,8 +298,8 @@ namespace TWPPract
                 {
                     if (line.Cells[i].Links.Length == 0)
                         continue;
-                    var links = string.Join(", ", line.Cells[i].Links);
-                    sb.AppendLine($"{line.Key} -> {links}[label=\"x{i.ToLowerUnicode()}\", weight=\"1\"]");
+                    var links = string.Join(", ", line.Cells[i].Links.Select(x => x.Replace(",", "")));
+                    sb.AppendLine($"{line.Key.Replace(",", "")} -> {links}[label=\"x{i.ToLowerUnicode()}\", weight=\"1\"]");
                 }
             }
             sb.AppendLine("}");

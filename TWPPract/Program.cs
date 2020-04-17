@@ -56,10 +56,12 @@ namespace TWPPract
             var table = TwpSolver.CreateTable(singleRules);
             TaskSolution.WriteLine("\n\n\n4.Недетерминированная таблица");
             TaskSolution.WriteLine(table.ToString());
+            var tableDiagraph = TwpSolver.CreateDiagraphByTable(table);
 
             var deterTable = TwpSolver.CreateDeterTable(table);
             TaskSolution.WriteLine("\n\n\n5.Детерминированная таблица");
             TaskSolution.WriteLine(deterTable.ToString());
+            var deterTableDiagraph = TwpSolver.CreateDiagraphByTable(deterTable);
 
             var groups = TwpSolver.CalculateGroups(deterTable);
             TaskSolution.WriteLine("\n\n\n6.Группировка");
@@ -72,6 +74,12 @@ namespace TWPPract
             var minimizedTable = TwpSolver.CreateMinimizedTable(deterTable, groups, true);
             TaskSolution.WriteLine(minimizedTable.ToString());
             
+            TaskSolution.WriteLine("\n\n\n8.Данные для Петри 1");
+            TaskSolution.WriteLine(tableDiagraph);
+            
+            TaskSolution.WriteLine("\n\n\n8.Данные для Петри 2");
+            TaskSolution.WriteLine(deterTableDiagraph);
+
             var solFileName = $"TWP_Sol_{name}.txt";
             File.WriteAllText(solFileName, TaskSolution.ReadAll, Encoding.UTF8);
             Console.WriteLine("Решение было выгружено в файл: " + solFileName);

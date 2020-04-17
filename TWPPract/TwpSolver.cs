@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using TWPPract.DataStructures;
 using Rule = TWPPract.DataStructures.Rule;
@@ -120,7 +122,8 @@ namespace TWPPract
 
             return table;
         }
-
+        
+        
         public static Table CreateDeterTable(Table table)
         {
             var newTable = table;
@@ -132,7 +135,7 @@ namespace TWPPract
                 {
                     if (tableCell.Links.Length > 1)
                     {
-                        var combinedKey = string.Join(".", tableCell.Links);
+                        var combinedKey = string.Join("_", tableCell.Links);
                         
                         // находим все строки где ключ один из текущих ссылок
                         var matchingRows = newTable.Where(x => tableCell.Links.Contains(x.Key)).ToArray();
@@ -283,6 +286,24 @@ namespace TWPPract
             
             return newTable;
         }
-        
+
+        public static string CreateDiagraphByTable(Table table)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("digraph {");
+
+            foreach (var line in table)
+            {
+                for (int i = 0; i < line.Cells.Length; i++)
+                {
+                    if (line.Cells[i].Links.Length == 0)
+                        continue;
+                    var links = string.Join(", ", line.Cells[i].Links);
+                    sb.AppendLine($"{line.Key} -> {links}[label=\"x{i}\", weight=\"1\"]");
+                }
+            }
+            sb.AppendLine("}");
+            return sb.ToString();
+        }
     }
 }

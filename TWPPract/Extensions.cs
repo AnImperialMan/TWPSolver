@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TWPPract.DataStructures;
 
 namespace TWPPract
 {
@@ -63,6 +64,11 @@ namespace TWPPract
             }
 
             return retStr;
+        }
+        
+        public static string Join(this Group group)
+        {
+            return Join(group.ToArray());
         }
     }
 }

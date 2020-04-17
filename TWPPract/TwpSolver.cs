@@ -263,7 +263,7 @@ namespace TWPPract
             for (int i = 0; i < groups.Count; i++)
             {
                 var group = groups[i];
-                var name = useQNamings ? $"q{i.ToLowerUnicode()}" : string.Join(",", group);
+                var name = useQNamings ? $"q{i.ToLowerUnicode()}" : group.Join();
                 for (var c = 0; c < TwpDataProvider.ColumnCount; c++)
                 {
                     for (var j = 0; j < deterTable.Count; j++)

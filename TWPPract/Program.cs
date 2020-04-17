@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace TWPPract
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        // Поставьте это в true если хотите чтобы в группах названиях были q0, q1... вместо списка элементов группы.
+        private const bool UseQNamings = false;
+        
+        private static void Main(string[] args)
         {
             Console.WriteLine("Введите свою фамилию и имя (не менее 18 символов)");
             var name = Console.ReadLine();
@@ -71,7 +74,7 @@ namespace TWPPract
             }
 
             TaskSolution.WriteLine("\n\n\n7.Минимизированная таблица");
-            var minimizedTable = TwpSolver.CreateMinimizedTable(deterTable, groups, true);
+            var minimizedTable = TwpSolver.CreateMinimizedTable(deterTable, groups, UseQNamings);
             TaskSolution.WriteLine(minimizedTable.ToString());
             var minimizedTableDiagraph = TwpSolver.CreateDiagraphByTable(minimizedTable);
             

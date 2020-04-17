@@ -135,7 +135,7 @@ namespace TWPPract
                 {
                     if (tableCell.Links.Length > 1)
                     {
-                        var combinedKey = string.Join("_", tableCell.Links);
+                        var combinedKey = tableCell.Links.Join();
 
                         // находим все строки где ключ один из текущих ссылок
                         var matchingRows = newTable.Where(x => tableCell.Links.Contains(x.Key)).ToArray();

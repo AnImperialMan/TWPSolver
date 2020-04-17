@@ -44,5 +44,25 @@ namespace TWPPract
         {
             return ToLowerUnicode((byte) item);
         }
+
+        public static string Join(this string[] links)
+        {
+            var retStr = "";
+            char prevLink = '\0';
+            foreach (var link in links)
+            {
+                if (link[0] == prevLink)
+                {
+                    retStr += link.Substring(1);
+                }
+                else
+                {
+                    retStr += link;
+                }
+                prevLink = link[0];
+            }
+
+            return retStr;
+        }
     }
 }
